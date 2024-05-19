@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8D7D5BAAFD6774E828AC17F5 /* Pods_uber_clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C47200D43D50C2ACFE8CE81 /* Pods_uber_clone.framework */; };
 		907FC4E22BDC8500000FF8CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 907FC4E12BDC8500000FF8CA /* GoogleService-Info.plist */; };
+		90FC3B3B2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FC3B3A2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift */; };
 		9F158A2225492D1400914DE8 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F158A2125492D1300914DE8 /* SettingsController.swift */; };
 		9F158A2525492FD100914DE8 /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F158A2425492FD100914DE8 /* UserInfoHeader.swift */; };
 		9F158A292549367F00914DE8 /* AddLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F158A282549367F00914DE8 /* AddLocationController.swift */; };
@@ -42,6 +43,7 @@
 		8C47200D43D50C2ACFE8CE81 /* Pods_uber_clone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_uber_clone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		907FC4E12BDC8500000FF8CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		90D2C7C1FCAAD9AFE31A34D7 /* Pods-uber-clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uber-clone.release.xcconfig"; path = "Target Support Files/Pods-uber-clone/Pods-uber-clone.release.xcconfig"; sourceTree = "<group>"; };
+		90FC3B3A2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAddressAnnotation.swift; sourceTree = "<group>"; };
 		9F158A2125492D1300914DE8 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		9F158A2425492FD100914DE8 /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
 		9F158A282549367F00914DE8 /* AddLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationController.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				9F636529253EBDDA00DCC065 /* User.swift */,
 				9FC9E153253F037500D90B30 /* DriverAnnotation.swift */,
 				9F97068925416791007F5014 /* Trip.swift */,
+				90FC3B3A2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90FC3B3B2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift in Sources */,
 				9FC81989253C5AA700F4141B /* SignUpController.swift in Sources */,
 				9FC8198C253C634500F4141B /* AuthButton.swift in Sources */,
 				9F3A77EC253D8362007B46EB /* HomeController.swift in Sources */,

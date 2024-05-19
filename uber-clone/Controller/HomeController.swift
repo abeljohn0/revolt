@@ -49,6 +49,7 @@ class HomeController: UIViewController {
     
     
     weak var delegate: HomeControllerDelegate?
+    var slidingPanelView: UIView!
     
     var user: User? {
         didSet {
@@ -62,6 +63,7 @@ class HomeController: UIViewController {
             } else {
                 observeTrips()
             }
+            fetchHomeAddresses()
         }
     }
     
@@ -94,6 +96,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         enableLocationServices()
         configureUI()
+        setupSlidingPanel()
     }
     
     // MARK: - Selectors
@@ -193,6 +196,41 @@ class HomeController: UIViewController {
         }
     }
     
+    func fetchHomeAddresses() {
+        REF_HOME_ADDRESS.observe(.value) { (snapshot) in
+            guard let allAddresses = snapshot.value as? [String: String] else { return }
+            
+            for (uid, addressString) in allAddresses {
+                self.geocodeAddressString(addressString) { coordinate in
+                    guard let coordinate = coordinate else { return }
+                    
+                    let annotation = HomeAddressAnnotation(uid: uid, coordinate: coordinate, address: addressString)
+                    
+                    self.mapView.addAnnotation(annotation)
+                }
+            }
+        }
+    }
+
+    func geocodeAddressString(_ addressString: String, completion: @escaping(CLLocationCoordinate2D?) -> Void) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(addressString) { placemarks, error in
+            if let error = error {
+                print("DEBUG: Failed to geocode address \(addressString) with error \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            guard let placemark = placemarks?.first,
+                  let location = placemark.location else {
+                completion(nil)
+                return
+            }
+            
+            completion(location.coordinate)
+        }
+    }
+    
     // MARK: - Drivers API
     
     func observeTrips() {
@@ -235,6 +273,27 @@ class HomeController: UIViewController {
             geocodeAddressString(address: workLocation)
         }
     }
+    
+    func setupSlidingPanel() {
+        // Create the sliding panel view
+        slidingPanelView = UIView()
+        slidingPanelView.backgroundColor = .white
+        slidingPanelView.layer.cornerRadius = 16
+        slidingPanelView.layer.shadowOpacity = 0.3
+        slidingPanelView.layer.shadowOffset = CGSize(width: 0, height: -2)
+        
+        view.addSubview(slidingPanelView)
+        
+        slidingPanelView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            slidingPanelView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            slidingPanelView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            slidingPanelView.heightAnchor.constraint(equalToConstant: 600),
+            slidingPanelView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 600)
+        ])
+    }
+    
+    
     
     func geocodeAddressString(address: String) {
         let geocoder = CLGeocoder()
@@ -433,7 +492,7 @@ extension HomeController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
             let view = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-            view.image = #imageLiteral(resourceName: "chevron-sign-to-right")
+            view.image = #imageLiteral(resourceName: "pin")
             return view
         }
         return nil
@@ -447,6 +506,20 @@ extension HomeController: MKMapViewDelegate {
             return lineRenderer
         }
         return MKOverlayRenderer()
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        guard let annotation = view.annotation else {return}
+        UIView.animate(withDuration: 0.3) {
+            self.slidingPanelView.transform = CGAffineTransform(translationX: 0, y: -600)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        guard let annotation = view.annotation else {return}
+        UIView.animate(withDuration: 0.3) {
+            self.slidingPanelView.transform = .identity
+        }
     }
     
     func zoomForActiveTrip(withDriverUid uid: String) {

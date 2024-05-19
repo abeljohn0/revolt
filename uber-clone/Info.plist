@@ -21,11 +21,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Please allow us to access your location so we can find you rides nearby</string>
+	<string>Please enable location access so we can find you homechargers nearby</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Please allow us to access your location so we can find you rides nearby</string>
+	<string>Please enable location access so we can find you homechargers nearby</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Please allow us to access your location so we can find you rides nearby</string>
+	<string>Please enable location access so we can find you homechargers nearby</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

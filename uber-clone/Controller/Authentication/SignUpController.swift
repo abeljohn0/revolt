@@ -41,6 +41,12 @@ class SignUpController: UIViewController {
         return view
     }()
     
+    private lazy var addressContainerView: UIView = {
+        let view = UIView().inputContainerView(image: #imageLiteral(resourceName: "pin"), textField: addressTextField)
+        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return view
+    }()
+    
     private lazy var accountTypeContainerView: UIView = {
         let view = UIView().inputContainerView(image: #imageLiteral(resourceName: "ic_lock_outline_white_2x"),
                                                segmentedControl: accountTypeSegmentedControl)
@@ -55,7 +61,7 @@ class SignUpController: UIViewController {
     }()
     
     private let fullnameTextField: UITextField = {
-        return UITextField().textField(withPlaceholder: "Fullname",
+        return UITextField().textField(withPlaceholder: "Full Name",
                                        isSecureTextEntry: false)
     }()
     
@@ -64,8 +70,13 @@ class SignUpController: UIViewController {
                                        isSecureTextEntry: true)
     }()
     
+    private let addressTextField: UITextField = {
+        return UITextField().textField(withPlaceholder: "Home Address",
+                                       isSecureTextEntry: false)
+    }()
+    
     private let accountTypeSegmentedControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Rider", "Driver"])
+        let sc = UISegmentedControl(items: ["Driver", "Homeowner"])
         sc.backgroundColor = .backgroundColor
         sc.tintColor = UIColor(white: 1, alpha: 0.87)
         sc.selectedSegmentIndex = 0
@@ -105,6 +116,7 @@ class SignUpController: UIViewController {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
         guard let fullname = fullnameTextField.text else { return }
+        guard let address = addressTextField.text else {return }
         let accountTypeIndex = accountTypeSegmentedControl.selectedSegmentIndex
         
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
@@ -115,11 +127,11 @@ class SignUpController: UIViewController {
             
             guard let uid = result?.user.uid else { return }
             
-            let values = ["email": email,
+            var values = ["email": email,
                           "fullname": fullname,
                           "accountType": accountTypeIndex] as [String : Any]
             
-            if accountTypeIndex == 1 {
+            if accountTypeIndex == 0 {
                 let geoFire = GeoFire(firebaseRef: REF_DRIVER_LOCATION)
                 guard let location = self.location else { return }
                 
@@ -127,7 +139,10 @@ class SignUpController: UIViewController {
                     self.uploadUserDataAndShowHomeController(uid: uid, values: values)
                 }
             }
-            self.uploadUserDataAndShowHomeController(uid: uid, values: values)
+            else {
+                values["homeAddress"] = address
+                self.uploadUserDataAndShowHomeController(uid: uid, values: values)
+            }
         }
     }
     
@@ -138,6 +153,17 @@ class SignUpController: UIViewController {
     // MARK: - Helpers
     
     func uploadUserDataAndShowHomeController(uid: String, values: [String: Any]) {
+        if values["accountType"] as? Int == 1 {
+            if let address = values["homeAddress"] as? String {
+                REF_HOME_ADDRESS.child(uid).setValue(address) {  (error, ref) in
+                if let error = error {
+                    print("DEBUG: Failed to add home address with error \(error.localizedDescription)")
+                    return
+                }
+                print("DEBUG: Successfully added home address")
+                }
+            }
+        }
         REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: { (error, ref) in
             let keyWindow = UIApplication.shared.windows.first { $0.isKeyWindow }
             guard let controller = keyWindow?.rootViewController as? ContainerController else { return }
@@ -155,6 +181,7 @@ class SignUpController: UIViewController {
         let stack = UIStackView(arrangedSubviews: [emailContainerView,
                                                    fullnameContainerView,
                                                    passwordContainerView,
+                                                   addressContainerView,
                                                    accountTypeContainerView,
                                                    signUpButton])
         stack.axis = .vertical

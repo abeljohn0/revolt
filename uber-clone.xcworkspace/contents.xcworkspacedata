@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:uber-clone.xcodeproj">
+      location = "group:/Users/abeljohn/Developer/uber-clone/revolt-charging.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

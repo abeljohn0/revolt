@@ -1,0 +1,582 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D7D5BAAFD6774E828AC17F5 /* Pods_uber_clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C47200D43D50C2ACFE8CE81 /* Pods_uber_clone.framework */; };
+		9035034D2C0C7C370006AE53 /* DriverNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9035034C2C0C7C370006AE53 /* DriverNavController.swift */; };
+		9035034F2C1136DC0006AE53 /* NormsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9035034E2C1136DC0006AE53 /* NormsController.swift */; };
+		907FC4E22BDC8500000FF8CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 907FC4E12BDC8500000FF8CA /* GoogleService-Info.plist */; };
+		90FC3B3B2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FC3B3A2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift */; };
+		9F158A2225492D1400914DE8 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F158A2125492D1300914DE8 /* SettingsController.swift */; };
+		9F158A2525492FD100914DE8 /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F158A2425492FD100914DE8 /* UserInfoHeader.swift */; };
+		9F158A292549367F00914DE8 /* AddLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F158A282549367F00914DE8 /* AddLocationController.swift */; };
+		9F1C02D6253C061F0058CD21 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1C02D5253C061F0058CD21 /* LoginController.swift */; };
+		9F3A77EC253D8362007B46EB /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3A77EB253D8362007B46EB /* HomeController.swift */; };
+		9F3A77EF253DB8A2007B46EB /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3A77EE253DB8A2007B46EB /* LocationInputActivationView.swift */; };
+		9F3A77F2253DC4CF007B46EB /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3A77F1253DC4CF007B46EB /* LocationInputView.swift */; };
+		9F3A77F5253DEDA7007B46EB /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3A77F4253DEDA7007B46EB /* LocationCell.swift */; };
+		9F46EFA6253BFDEF0046C4A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F46EFA5253BFDEF0046C4A6 /* AppDelegate.swift */; };
+		9F46EFA8253BFDEF0046C4A6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F46EFA7253BFDEF0046C4A6 /* SceneDelegate.swift */; };
+		9F46EFAD253BFDEF0046C4A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F46EFAB253BFDEF0046C4A6 /* Main.storyboard */; };
+		9F46EFAF253BFDF00046C4A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F46EFAE253BFDF00046C4A6 /* Assets.xcassets */; };
+		9F46EFB2253BFDF00046C4A6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F46EFB0253BFDF00046C4A6 /* LaunchScreen.storyboard */; };
+		9F4A4D24254073AE0068A45C /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4A4D23254073AE0068A45C /* RideActionView.swift */; };
+		9F636527253EB61800DCC065 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F636526253EB61800DCC065 /* Service.swift */; };
+		9F63652A253EBDDA00DCC065 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F636529253EBDDA00DCC065 /* User.swift */; };
+		9F63652D253EC7E300DCC065 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F63652C253EC7E300DCC065 /* LocationHandler.swift */; };
+		9F7CCA4B254838F2002505B3 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7CCA4A254838F2002505B3 /* MenuController.swift */; };
+		9F7CCA4E25483907002505B3 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7CCA4D25483907002505B3 /* ContainerController.swift */; };
+		9F7CCA5125483E83002505B3 /* MenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7CCA5025483E83002505B3 /* MenuHeader.swift */; };
+		9F97068A25416791007F5014 /* Charge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97068925416791007F5014 /* Charge.swift */; };
+		9F97068D25417945007F5014 /* ConfirmationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F97068C25417945007F5014 /* ConfirmationController.swift */; };
+		9FC81986253C107700F4141B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC81985253C107700F4141B /* Extensions.swift */; };
+		9FC81989253C5AA700F4141B /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC81988253C5AA700F4141B /* SignUpController.swift */; };
+		9FC8198C253C634500F4141B /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC8198B253C634500F4141B /* AuthButton.swift */; };
+		9FC9E154253F037500D90B30 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9E153253F037500D90B30 /* DriverAnnotation.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2050C021BC5D32C4C3C250D4 /* Pods-uber-clone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uber-clone.debug.xcconfig"; path = "Target Support Files/Pods-uber-clone/Pods-uber-clone.debug.xcconfig"; sourceTree = "<group>"; };
+		8C47200D43D50C2ACFE8CE81 /* Pods_uber_clone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_uber_clone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9035034C2C0C7C370006AE53 /* DriverNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverNavController.swift; sourceTree = "<group>"; };
+		9035034E2C1136DC0006AE53 /* NormsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormsController.swift; sourceTree = "<group>"; };
+		907FC4E12BDC8500000FF8CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		90D2C7C1FCAAD9AFE31A34D7 /* Pods-uber-clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uber-clone.release.xcconfig"; path = "Target Support Files/Pods-uber-clone/Pods-uber-clone.release.xcconfig"; sourceTree = "<group>"; };
+		90FC3B3A2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAddressAnnotation.swift; sourceTree = "<group>"; };
+		9F158A2125492D1300914DE8 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		9F158A2425492FD100914DE8 /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
+		9F158A282549367F00914DE8 /* AddLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationController.swift; sourceTree = "<group>"; };
+		9F1C02D5253C061F0058CD21 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		9F3A77EB253D8362007B46EB /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		9F3A77EE253DB8A2007B46EB /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
+		9F3A77F1253DC4CF007B46EB /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
+		9F3A77F4253DEDA7007B46EB /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		9F46EFA2253BFDEF0046C4A6 /* uber-clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "uber-clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F46EFA5253BFDEF0046C4A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9F46EFA7253BFDEF0046C4A6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		9F46EFAC253BFDEF0046C4A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9F46EFAE253BFDF00046C4A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9F46EFB1253BFDF00046C4A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9F46EFB3253BFDF00046C4A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F4A4D23254073AE0068A45C /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
+		9F636526253EB61800DCC065 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		9F636529253EBDDA00DCC065 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9F63652C253EC7E300DCC065 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
+		9F7CCA4A254838F2002505B3 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		9F7CCA4D25483907002505B3 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
+		9F7CCA5025483E83002505B3 /* MenuHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeader.swift; sourceTree = "<group>"; };
+		9F97068925416791007F5014 /* Charge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charge.swift; sourceTree = "<group>"; };
+		9F97068C25417945007F5014 /* ConfirmationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationController.swift; sourceTree = "<group>"; };
+		9FC81985253C107700F4141B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		9FC81988253C5AA700F4141B /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
+		9FC8198B253C634500F4141B /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
+		9FC9E153253F037500D90B30 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9F46EF9F253BFDEF0046C4A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D7D5BAAFD6774E828AC17F5 /* Pods_uber_clone.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9F158A272549365F00914DE8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				9F158A2125492D1300914DE8 /* SettingsController.swift */,
+				9F158A282549367F00914DE8 /* AddLocationController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		9F46EF99253BFDEF0046C4A6 = {
+			isa = PBXGroup;
+			children = (
+				9F46EFA4253BFDEF0046C4A6 /* revolt-charging */,
+				9F46EFA3253BFDEF0046C4A6 /* Products */,
+				C93D89EBD2606EF1CAC35961 /* Pods */,
+				FC9248FF607CC2469814A3B1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		9F46EFA3253BFDEF0046C4A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F46EFA2253BFDEF0046C4A6 /* uber-clone.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9F46EFA4253BFDEF0046C4A6 /* revolt-charging */ = {
+			isa = PBXGroup;
+			children = (
+				9F46EFBF253C05350046C4A6 /* Model */,
+				9F46EFBE253C05330046C4A6 /* View */,
+				9F46EFBD253C05300046C4A6 /* Controller */,
+				9F46EFBC253C052E0046C4A6 /* Service */,
+				9F46EFBA253C05180046C4A6 /* Utils */,
+				9F46EFA5253BFDEF0046C4A6 /* AppDelegate.swift */,
+				9F46EFA7253BFDEF0046C4A6 /* SceneDelegate.swift */,
+				9F46EFAB253BFDEF0046C4A6 /* Main.storyboard */,
+				9F46EFAE253BFDF00046C4A6 /* Assets.xcassets */,
+				907FC4E12BDC8500000FF8CA /* GoogleService-Info.plist */,
+				9F46EFB0253BFDF00046C4A6 /* LaunchScreen.storyboard */,
+				9F46EFB3253BFDF00046C4A6 /* Info.plist */,
+			);
+			path = "revolt-charging";
+			sourceTree = "<group>";
+		};
+		9F46EFBA253C05180046C4A6 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9FC81985253C107700F4141B /* Extensions.swift */,
+				9F63652C253EC7E300DCC065 /* LocationHandler.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		9F46EFBC253C052E0046C4A6 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				9F636526253EB61800DCC065 /* Service.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		9F46EFBD253C05300046C4A6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9F158A272549365F00914DE8 /* Settings */,
+				9F7CCA49254838E4002505B3 /* SideMenu */,
+				9F7CCA48254838D3002505B3 /* Authentication */,
+				9F3A77EB253D8362007B46EB /* HomeController.swift */,
+				9035034E2C1136DC0006AE53 /* NormsController.swift */,
+				9F97068C25417945007F5014 /* ConfirmationController.swift */,
+				9035034C2C0C7C370006AE53 /* DriverNavController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9F46EFBE253C05330046C4A6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9FC8198B253C634500F4141B /* AuthButton.swift */,
+				9F3A77EE253DB8A2007B46EB /* LocationInputActivationView.swift */,
+				9F3A77F1253DC4CF007B46EB /* LocationInputView.swift */,
+				9F3A77F4253DEDA7007B46EB /* LocationCell.swift */,
+				9F4A4D23254073AE0068A45C /* RideActionView.swift */,
+				9F7CCA5025483E83002505B3 /* MenuHeader.swift */,
+				9F158A2425492FD100914DE8 /* UserInfoHeader.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9F46EFBF253C05350046C4A6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9F636529253EBDDA00DCC065 /* User.swift */,
+				9FC9E153253F037500D90B30 /* DriverAnnotation.swift */,
+				9F97068925416791007F5014 /* Charge.swift */,
+				90FC3B3A2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9F7CCA48254838D3002505B3 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				9F1C02D5253C061F0058CD21 /* LoginController.swift */,
+				9FC81988253C5AA700F4141B /* SignUpController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		9F7CCA49254838E4002505B3 /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				9F7CCA4A254838F2002505B3 /* MenuController.swift */,
+				9F7CCA4D25483907002505B3 /* ContainerController.swift */,
+			);
+			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		C93D89EBD2606EF1CAC35961 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2050C021BC5D32C4C3C250D4 /* Pods-uber-clone.debug.xcconfig */,
+				90D2C7C1FCAAD9AFE31A34D7 /* Pods-uber-clone.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		FC9248FF607CC2469814A3B1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C47200D43D50C2ACFE8CE81 /* Pods_uber_clone.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9F46EFA1253BFDEF0046C4A6 /* uber-clone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F46EFB6253BFDF00046C4A6 /* Build configuration list for PBXNativeTarget "uber-clone" */;
+			buildPhases = (
+				E8B8E30AE614B346EDEF6888 /* [CP] Check Pods Manifest.lock */,
+				9F46EF9E253BFDEF0046C4A6 /* Sources */,
+				9F46EF9F253BFDEF0046C4A6 /* Frameworks */,
+				9F46EFA0253BFDEF0046C4A6 /* Resources */,
+				7D72BAF5AFE9DB16AAF7F32E /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "uber-clone";
+			productName = "uber-clone";
+			productReference = 9F46EFA2253BFDEF0046C4A6 /* uber-clone.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9F46EF9A253BFDEF0046C4A6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1200;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					9F46EFA1253BFDEF0046C4A6 = {
+						CreatedOnToolsVersion = 12.0.1;
+					};
+				};
+			};
+			buildConfigurationList = 9F46EF9D253BFDEF0046C4A6 /* Build configuration list for PBXProject "revolt-charging" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9F46EF99253BFDEF0046C4A6;
+			productRefGroup = 9F46EFA3253BFDEF0046C4A6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9F46EFA1253BFDEF0046C4A6 /* uber-clone */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9F46EFA0253BFDEF0046C4A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F46EFB2253BFDF00046C4A6 /* LaunchScreen.storyboard in Resources */,
+				907FC4E22BDC8500000FF8CA /* GoogleService-Info.plist in Resources */,
+				9F46EFAF253BFDF00046C4A6 /* Assets.xcassets in Resources */,
+				9F46EFAD253BFDEF0046C4A6 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7D72BAF5AFE9DB16AAF7F32E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-uber-clone/Pods-uber-clone-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-uber-clone/Pods-uber-clone-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-uber-clone/Pods-uber-clone-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8B8E30AE614B346EDEF6888 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-uber-clone-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9F46EF9E253BFDEF0046C4A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90FC3B3B2BFA7B6C00D4CF66 /* HomeAddressAnnotation.swift in Sources */,
+				9FC81989253C5AA700F4141B /* SignUpController.swift in Sources */,
+				9FC8198C253C634500F4141B /* AuthButton.swift in Sources */,
+				9F3A77EC253D8362007B46EB /* HomeController.swift in Sources */,
+				9F158A2525492FD100914DE8 /* UserInfoHeader.swift in Sources */,
+				9F158A2225492D1400914DE8 /* SettingsController.swift in Sources */,
+				9F3A77F2253DC4CF007B46EB /* LocationInputView.swift in Sources */,
+				9F97068A25416791007F5014 /* Charge.swift in Sources */,
+				9F97068D25417945007F5014 /* ConfirmationController.swift in Sources */,
+				9FC9E154253F037500D90B30 /* DriverAnnotation.swift in Sources */,
+				9F46EFA6253BFDEF0046C4A6 /* AppDelegate.swift in Sources */,
+				9F1C02D6253C061F0058CD21 /* LoginController.swift in Sources */,
+				9F158A292549367F00914DE8 /* AddLocationController.swift in Sources */,
+				9F3A77F5253DEDA7007B46EB /* LocationCell.swift in Sources */,
+				9F7CCA4B254838F2002505B3 /* MenuController.swift in Sources */,
+				9035034F2C1136DC0006AE53 /* NormsController.swift in Sources */,
+				9F63652D253EC7E300DCC065 /* LocationHandler.swift in Sources */,
+				9F7CCA4E25483907002505B3 /* ContainerController.swift in Sources */,
+				9035034D2C0C7C370006AE53 /* DriverNavController.swift in Sources */,
+				9F7CCA5125483E83002505B3 /* MenuHeader.swift in Sources */,
+				9F46EFA8253BFDEF0046C4A6 /* SceneDelegate.swift in Sources */,
+				9F4A4D24254073AE0068A45C /* RideActionView.swift in Sources */,
+				9F63652A253EBDDA00DCC065 /* User.swift in Sources */,
+				9F636527253EB61800DCC065 /* Service.swift in Sources */,
+				9F3A77EF253DB8A2007B46EB /* LocationInputActivationView.swift in Sources */,
+				9FC81986253C107700F4141B /* Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9F46EFAB253BFDEF0046C4A6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9F46EFAC253BFDEF0046C4A6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		9F46EFB0253BFDF00046C4A6 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9F46EFB1253BFDF00046C4A6 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9F46EFB4253BFDF00046C4A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9F46EFB5253BFDF00046C4A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9F46EFB7253BFDF00046C4A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2050C021BC5D32C4C3C250D4 /* Pods-uber-clone.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TR992NWT59;
+				INFOPLIST_FILE = "uber-clone/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.company.revolt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9F46EFB8253BFDF00046C4A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90D2C7C1FCAAD9AFE31A34D7 /* Pods-uber-clone.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TR992NWT59;
+				INFOPLIST_FILE = "uber-clone/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.company.revolt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9F46EF9D253BFDEF0046C4A6 /* Build configuration list for PBXProject "revolt-charging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F46EFB4253BFDF00046C4A6 /* Debug */,
+				9F46EFB5253BFDF00046C4A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9F46EFB6253BFDF00046C4A6 /* Build configuration list for PBXNativeTarget "uber-clone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F46EFB7253BFDF00046C4A6 /* Debug */,
+				9F46EFB8253BFDF00046C4A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9F46EF9A253BFDEF0046C4A6 /* Project object */;
+}

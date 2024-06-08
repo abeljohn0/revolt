@@ -102,7 +102,7 @@
 		9F46EF99253BFDEF0046C4A6 = {
 			isa = PBXGroup;
 			children = (
-				9F46EFA4253BFDEF0046C4A6 /* uber-clone */,
+				9F46EFA4253BFDEF0046C4A6 /* revolt-charging */,
 				9F46EFA3253BFDEF0046C4A6 /* Products */,
 				C93D89EBD2606EF1CAC35961 /* Pods */,
 				FC9248FF607CC2469814A3B1 /* Frameworks */,
@@ -117,7 +117,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9F46EFA4253BFDEF0046C4A6 /* uber-clone */ = {
+		9F46EFA4253BFDEF0046C4A6 /* revolt-charging */ = {
 			isa = PBXGroup;
 			children = (
 				9F46EFBF253C05350046C4A6 /* Model */,
@@ -133,7 +133,7 @@
 				9F46EFB0253BFDF00046C4A6 /* LaunchScreen.storyboard */,
 				9F46EFB3253BFDF00046C4A6 /* Info.plist */,
 			);
-			path = "uber-clone";
+			path = "revolt-charging";
 			sourceTree = "<group>";
 		};
 		9F46EFBA253C05180046C4A6 /* Utils */ = {

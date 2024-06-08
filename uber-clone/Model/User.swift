@@ -2,7 +2,7 @@
 //  User.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 20/10/2020.
+//  Created by Abel John on 20/10/2020.
 //
 
 import CoreLocation
@@ -18,8 +18,8 @@ struct User {
     var accountType: AccountType!
     var location: CLLocation?
     let uid: String
-    var homeLocation: String?
-    var workLocation: String?
+    var homeLocation: CLLocationCoordinate2D?
+    var address: String?
     
     var firstInitial: String { return String(fullname.prefix(1))}
     
@@ -28,12 +28,12 @@ struct User {
         self.fullname = dictionary["fullname"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""
         
-        if let home = dictionary["accountType"] as? String {
-            self.homeLocation = home
+        if let coordinates = dictionary["houseCoordinates"] as? [Double] {
+            self.homeLocation = CLLocationCoordinate2D(latitude: coordinates[0], longitude: coordinates[1])
         }
-    
-        if let work = dictionary["accountType"] as? String {
-            self.workLocation = work
+        
+        if let address = dictionary["homeAddress"] as? String {
+            self.address = address
         }
         
         if let index = dictionary["accountType"] as? Int {

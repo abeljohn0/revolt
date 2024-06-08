@@ -2,7 +2,7 @@
 //  Extensions.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 18/10/2020.
+//  Created by Abel John on 18/10/2020.
 //
 
 import UIKit
@@ -22,17 +22,16 @@ extension UIColor {
 
 extension UIView {
     
-    func inputContainerView(image: UIImage, textField: UITextField? = nil,
-                            segmentedControl: UISegmentedControl? = nil) -> UIView {
+    func inputContainerView(image: UIImage? = nil, textField: UITextField? = nil,
+                            segmentedControl: UISegmentedControl? = nil, preTimeField: UIDatePicker? = nil, postTimeField: UIDatePicker? = nil) -> UIView {
         let view = UIView()
         
-        let imageView = UIImageView()
-        imageView.image = image
-        imageView.alpha = 0.87
-        view.addSubview(imageView)
-        
-        
         if let textField = textField {
+            let imageView = UIImageView()
+            imageView.image = image
+            imageView.alpha = 0.87
+            view.addSubview(imageView)
+            
             imageView.centerY(inView: view)
             imageView.anchor(left: view.leftAnchor, paddingLeft: 8, width: 24, height: 24)
             
@@ -43,13 +42,39 @@ extension UIView {
         }
         
         if let sc = segmentedControl {
-            imageView.anchor(top: view.topAnchor, left: view.leftAnchor,
-                             paddingTop: -8, paddingLeft: 8, width: 24, height: 24)
+//            imageView.anchor(top: view.topAnchor, left: view.leftAnchor,
+//                             paddingTop: -8, paddingLeft: 8, width: 24, height: 24)
             
             view.addSubview(sc)
             sc.anchor(left: view.leftAnchor, right: view.rightAnchor,
                      paddingLeft: 8, paddingRight: 8)
             sc.centerY(inView: view, constant: 8)
+        }
+        
+        if let time1 = preTimeField, let time2 = postTimeField {
+            let title = UILabel()
+            title.font = .boldSystemFont(ofSize: 18)
+            title.text = "Charger Availability: "
+            title.textColor = .white
+            title.textAlignment = .center
+            let trans = UILabel()
+            trans.font = .systemFont(ofSize: 10)
+            trans.text = " to "
+            trans.textColor = .white
+            trans.textAlignment = .center
+            
+            
+            let timeStack = UIStackView(arrangedSubviews: [title,
+                        time1,
+                        trans,
+                        time2])
+            timeStack.axis = .horizontal
+            timeStack.distribution = .fillProportionally
+            view.addSubview(timeStack)
+            timeStack.centerY(inView: view)
+            timeStack.anchor(left: view.leftAnchor, right: view.rightAnchor,
+                             paddingLeft: 8, paddingRight: 8, width: 24, height: 40)
+//            stack.spacing = 24
         }
         
         let separatorView = UIView()
@@ -170,11 +195,12 @@ extension MKMapView {
         setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
     }
     
-    func addAnnotationAndSelect(forCoordinate coordinate: CLLocationCoordinate2D) {
+    func addAnnotationAndSelect(forCoordinate coordinate: CLLocationCoordinate2D) -> MKAnnotation {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         addAnnotation(annotation)
         selectAnnotation(annotation, animated: true)
+        return annotation
     }
 }
 

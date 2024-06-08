@@ -2,7 +2,7 @@
 //  RideActionView.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 21/10/2020.
+//  Created by Abel John on 21/10/2020.
 //
 
 import UIKit
@@ -39,7 +39,7 @@ enum ButtonAction: CustomStringConvertible {
         switch self {
         case .requestRide: return "CONFIRM UBERX"
         case .cancel: return "CANCEL RIDE"
-        case .getDirections: return "GET DIRECTIONS"
+        case .getDirections: return "Happy Charging!"
         case .pickup: return "PICKUP PASSENGER"
         case .dropoff: return "DROP OFF PASSENGER"
         }
@@ -199,7 +199,7 @@ class RideActionView: UIView {
             guard let user = user else { return }
             
             if user.accountType == .passenger {
-                titleLabel.text = "En Route To Passenger"
+                titleLabel.text = "Driver En Route!"
                 buttonAction = .getDirections
                 actionButton.setTitle(buttonAction.description, for: .normal)
             } else {

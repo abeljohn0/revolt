@@ -2,7 +2,7 @@
 //  HomeController.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 19/10/2020.
+//  Created by Abel John on 19/10/2020.
 //
 
 import UIKit
@@ -39,6 +39,7 @@ class HomeController: UIViewController {
     private let rideActionView = RideActionView()
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
+    private let bannerView = UIView()
     private let tableView = UITableView()
     private var searchResults = [MKPlacemark]()
     private var savedLocations = [MKPlacemark]()
@@ -46,39 +47,53 @@ class HomeController: UIViewController {
     private final let rideActionViewHeight: CGFloat = 300
     private var actionButtonConfig = ActionButtonConfiguration()
     private var route: MKRoute?
-    
-    
+    private var usernameLabel = UILabel()
+    private var addressLabel = UILabel()
+    private var chargerLabel = UILabel()
+    private var currentSelectedAnnotation: HomeAddressAnnotation?
+    private var houselocations: [String: [String: Any]]?
+    private var availability: [[String]] = [["9","00","A.M."],["5","00", "P.M."]]
+    private let uid = Auth.auth().currentUser?.uid
+    public var newUser: Bool = false
     weak var delegate: HomeControllerDelegate?
     var slidingPanelView: UIView!
     
     var user: User? {
         didSet {
             locationInputView.user = user
-            
             if user?.accountType == .passenger {
-                fetchDrivers()
-                configureLocationInputActivationView()
-                observeCurrentTrip()
-                configureSavedUserLocations()
+//                fetchDrivers()
+//                configureLocationInputActivationView()
+//                configureSavedUserLocations()
             } else {
                 observeTrips()
             }
             fetchHomeAddresses()
+            if newUser {
+                let controller = NormsController(user!)
+                controller.modalPresentationStyle = .popover
+                self.present(controller, animated: true, completion: nil)
+            }
         }
     }
     
-    private var trip: Trip? {
+    private var trip: Charge? {
         didSet {
             guard let user = user else { return }
-            
-            if user.accountType == .driver {
-                guard let trip = trip else { return }
-                let controller = PickupController(trip: trip)
-                controller.modalPresentationStyle = .fullScreen
+            guard let trip = trip else { return }
+            print("surely OK")
+            print(trip)
+            if user.accountType == .driver &&  trip.state == .requested {
+                configureDriverMapView()
+                let controller = ConfirmationController(trip: trip)
+                controller.modalPresentationStyle = .popover
                 controller.delegate = self
                 self.present(controller, animated: true, completion: nil)
-            } else {
-                print("DEBUG: Show ride action view for accpeted trip")
+            } else if user.accountType == .passenger &&  trip.state == .requested {
+//                print(trip)
+                let controller = DriverNavController(trip: trip)
+                controller.modalPresentationStyle = .popover
+                self.present(controller, animated: true, completion: nil)
             }
         }
     }
@@ -87,6 +102,13 @@ class HomeController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "baseline_menu_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleButtonPressed), for: .touchUpInside)
+        return button
+    }()
+    
+    private let cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "baseline_clear_white_36pt_2x").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleDismissal), for: .touchUpInside)
         return button
     }()
     
@@ -117,10 +139,17 @@ class HomeController: UIViewController {
         }
     }
     
+    @objc func handleDismissal() {
+        mapView.deselectAnnotation(currentSelectedAnnotation, animated: true)
+        currentSelectedAnnotation = nil
+    }
+    
     // MARK: - Passenger API
     
-    func observeCurrentTrip() {
-        PassengerService.shared.observeCurrentTrip { (trip) in
+    func observeCurrentTrip(_ uid: String) {
+        PassengerService.shared.observeCurrentTrip(uid: uid) { (trip) in
+            print("TRIGGERED")
+            print(trip)
             self.trip = trip
             guard let state = trip.state else { return }
             guard let driverUid = trip.driverUid else { return }
@@ -133,9 +162,9 @@ class HomeController: UIViewController {
                 self.removeAnnotationAndOverlays()
                 self.zoomForActiveTrip(withDriverUid: driverUid)
                 
-                Service.shared.fetchUserData(uid: driverUid) { (driver) in
-                    self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: driver)
-                }
+//                Service.shared.fetchUserData(uid: driverUid) { (driver) in
+//                    self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: driver)
+//                }
             case .driverArrived:
                 self.rideActionView.config = .driverArrived
             case .inProgress:
@@ -143,7 +172,7 @@ class HomeController: UIViewController {
             case .arrivedAtDestination:
                 self.rideActionView.config = .endTrip
             case .completed:
-                PassengerService.shared.deleteTrip { (error, ref) in
+                PassengerService.shared.deleteTrip(self.trip!.homeOwnerUid) { (error, ref) in
                     self.animateRideActionView(shouldShow: false)
                     self.centerMapOnUserLocation()
                     self.actionButtonConfig = .showMenu
@@ -151,6 +180,13 @@ class HomeController: UIViewController {
                     self.inputActivationView.alpha = 1
                     self.presentAlertController(withTitle: "Trip Completed", message: "We hope you enjoyed your trip")
                 }
+            case .cancelled:
+                print("CANCELLED")
+                self.dismiss(animated: true, completion: nil)
+                let alert = UIAlertController(title: "HOMEOWNER HAS CANCELLED SESSION", message: "We apologize for the inconveniece, but it looks as though the homeowner has cancelled their charge within the allowed 2-minute window. Please find another charger.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+                self.cancelTrip()
             }
         }
     }
@@ -160,12 +196,12 @@ class HomeController: UIViewController {
         DriverService.shared.updateTripState(trip: trip, state: .inProgress) { (err, ref) in
             self.rideActionView.config = .tripInProgress
             self.removeAnnotationAndOverlays()
-            self.mapView.addAnnotationAndSelect(forCoordinate: trip.destinationCoordinates)
+//            self.mapView.addAnnotationAndSelect(forCoordinate: trip.destinationCoordinates)
             
-            let placemark = MKPlacemark(coordinate: trip.destinationCoordinates)
+            let placemark = MKPlacemark(coordinate: trip.driverCoordinates)
             let mapItem = MKMapItem(placemark: placemark)
         
-            self.setCustomRegion(withType: .destination, coordinates: trip.destinationCoordinates)
+            self.setCustomRegion(withType: .destination, coordinates: trip.driverCoordinates)
             self.generatePolyline(toDestination: mapItem)
             
             self.mapView.zoomToFit(annotations: self.mapView.annotations)
@@ -196,18 +232,20 @@ class HomeController: UIViewController {
         }
     }
     
+    func getAnnotation(_ uid: String, _ addressAndCoords: [String: Any]) -> HomeAddressAnnotation {
+        let coordinates = addressAndCoords["houseCoordinates"] as! [Double]
+        let annotation = HomeAddressAnnotation(uid: uid, coordinate: CLLocationCoordinate2D(latitude: coordinates[0], longitude: coordinates[1]), address: addressAndCoords["address"] as! String)
+        return annotation
+    }
+    
     func fetchHomeAddresses() {
+//        print("hi")
         REF_HOME_ADDRESS.observe(.value) { (snapshot) in
-            guard let allAddresses = snapshot.value as? [String: String] else { return }
-            
-            for (uid, addressString) in allAddresses {
-                self.geocodeAddressString(addressString) { coordinate in
-                    guard let coordinate = coordinate else { return }
-                    
-                    let annotation = HomeAddressAnnotation(uid: uid, coordinate: coordinate, address: addressString)
-                    
-                    self.mapView.addAnnotation(annotation)
-                }
+            guard let locations = snapshot.value as? [String: [String: Any]] else { return }
+            self.houselocations = locations
+            for (uid, addressAndCoords) in locations {
+                let annotation = self.getAnnotation(uid, addressAndCoords)
+                self.mapView.addAnnotation(annotation)
             }
         }
     }
@@ -234,12 +272,12 @@ class HomeController: UIViewController {
     // MARK: - Drivers API
     
     func observeTrips() {
-        DriverService.shared.oberveTrips { (trip) in
+        DriverService.shared.observeCharge { (trip) in
             self.trip = trip
         }
     }
     
-    func observeCancelledTrip(trip: Trip) {
+    func observeCancelledTrip(trip: Charge) {
         DriverService.shared.observeTripCancelled(trip: trip) {
             self.removeAnnotationAndOverlays()
             self.animateRideActionView(shouldShow: false)
@@ -261,23 +299,31 @@ class HomeController: UIViewController {
         }
     }
     
-    func configureSavedUserLocations() {
-        guard let user = user else { return }
-        savedLocations.removeAll()
+//    func configureSavedUserLocations() {
+//        guard let user = user else { return }
+//        savedLocations.removeAll()
+//        
+//        if let homeLocation = user.homeLocation {
+//            geocodeAddressString(address: homeLocation)
+//        }
+//        
+//        if let workLocation = user.workLocation {
+//            geocodeAddressString(address: workLocation)
+//        }
+//    }
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
         
-        if let homeLocation = user.homeLocation {
-            geocodeAddressString(address: homeLocation)
+        let resizedImage = renderer.image { (context) in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
         }
         
-        if let workLocation = user.workLocation {
-            geocodeAddressString(address: workLocation)
-        }
+        return resizedImage
     }
     
     func setupSlidingPanel() {
-        // Create the sliding panel view
         slidingPanelView = UIView()
-        slidingPanelView.backgroundColor = .white
+        slidingPanelView.backgroundColor = UIColor(red: 0xb6/255.0, green: 0xce/255.0, blue: 0xe3/255.0, alpha: 1)
         slidingPanelView.layer.cornerRadius = 16
         slidingPanelView.layer.shadowOpacity = 0.3
         slidingPanelView.layer.shadowOffset = CGSize(width: 0, height: -2)
@@ -291,6 +337,165 @@ class HomeController: UIViewController {
             slidingPanelView.heightAnchor.constraint(equalToConstant: 600),
             slidingPanelView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 600)
         ])
+        
+        slidingPanelView.addSubview(cancelButton)
+        cancelButton.anchor(top: slidingPanelView.topAnchor,
+                            left: slidingPanelView.leftAnchor,
+                            paddingTop: 10, paddingLeft: 10)
+        
+        self.usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.usernameLabel.textAlignment = .center
+        self.usernameLabel.font = UIFont.boldSystemFont(ofSize: 30)
+        self.usernameLabel.textColor = .black
+        self.usernameLabel.numberOfLines = 0
+        
+        slidingPanelView.addSubview(self.usernameLabel)
+        self.usernameLabel.anchor(top: slidingPanelView.topAnchor, left: slidingPanelView.leftAnchor, right: slidingPanelView.rightAnchor, paddingTop: 16, paddingLeft: 32, paddingRight: 32)
+//        NSLayoutConstraint.activate([
+//                usernameLabel.centerXAnchor.constraint(equalTo: slidingPanelView.centerXAnchor),
+////                usernameLabel.centerYAnchor.constraint(equalTo: slidingPanelView.centerYAnchor),
+//                usernameLabel.leadingAnchor.constraint(greaterThanOrEqualTo: slidingPanelView.leadingAnchor, constant: 50), // Optional: to ensure the label does not hug the edges
+//                usernameLabel.trailingAnchor.constraint(lessThanOrEqualTo: slidingPanelView.trailingAnchor, constant: -50) // Optional: to ensure the label does not hug the edges
+//            ])
+        
+        self.addressLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addressLabel.textAlignment = .left
+        self.addressLabel.font = UIFont.systemFont(ofSize: 18)
+        self.addressLabel.adjustsFontSizeToFitWidth = true
+        self.addressLabel.minimumScaleFactor = 0.5
+        self.addressLabel.numberOfLines = 0
+        self.addressLabel.textColor = .black
+//        slidingPanelView.addSubview(self.addressLabel)
+        
+        let homeIconView = UIImageView()
+        homeIconView.translatesAutoresizingMaskIntoConstraints = false
+        homeIconView.image = UIImage(named: "home_icon")
+        homeIconView.contentMode = .scaleAspectFit
+        homeIconView.clipsToBounds = true
+        var newSize = CGSize(width: 50, height: 50)
+        homeIconView.image = resizeImage(image: homeIconView.image!, targetSize: newSize)
+        homeIconView.layer.cornerRadius = 27
+        
+        let stackView = UIStackView(arrangedSubviews: [homeIconView, self.addressLabel])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        stackView.alignment = .fill
+        stackView.spacing = 4
+
+        slidingPanelView.addSubview(stackView)
+        
+        stackView.anchor(top: usernameLabel.bottomAnchor, left: slidingPanelView.leftAnchor, right: slidingPanelView.rightAnchor, paddingTop: 16, paddingLeft: 10, paddingRight: 10)
+        
+        let plugIconView = UIImageView()
+        plugIconView.translatesAutoresizingMaskIntoConstraints = false
+        plugIconView.image = UIImage(named: "charger_plug_icon_white")
+        plugIconView.contentMode = .scaleAspectFit
+        plugIconView.clipsToBounds = true
+        newSize = CGSize(width: 55, height: 55)
+        plugIconView.image = resizeImage(image: plugIconView.image!, targetSize: newSize)
+        plugIconView.layer.cornerRadius = 18
+        
+        chargerLabel.translatesAutoresizingMaskIntoConstraints = false
+        chargerLabel.textAlignment = .left
+        chargerLabel.font = UIFont.systemFont(ofSize: 18)
+        chargerLabel.adjustsFontSizeToFitWidth = true
+        chargerLabel.minimumScaleFactor = 0.5
+        chargerLabel.numberOfLines = 0
+        chargerLabel.textColor = .black
+        chargerLabel.text = "L2 (Tesla NACS and J1722 Connectors)"
+        
+        let stackView2 = UIStackView(arrangedSubviews: [plugIconView, chargerLabel])
+        stackView2.axis = .horizontal
+        stackView2.distribution = .fillProportionally
+        stackView2.alignment = .fill
+        stackView2.spacing = 4
+        
+        slidingPanelView.addSubview(stackView2)
+        
+        stackView2.anchor(top: stackView.bottomAnchor, left: slidingPanelView.leftAnchor, right: slidingPanelView.rightAnchor, paddingTop: 4, paddingLeft: 10, paddingRight: 10)
+        
+        let clockIconView = UIImageView()
+        clockIconView.translatesAutoresizingMaskIntoConstraints = false
+        clockIconView.image = UIImage(named: "clock_icon")
+        clockIconView.contentMode = .scaleAspectFit
+        clockIconView.clipsToBounds = true
+        newSize = CGSize(width: 50, height: 50)
+        clockIconView.image = resizeImage(image: clockIconView.image!, targetSize: newSize)
+        clockIconView.layer.cornerRadius = 32
+        
+        let clockLabel = UILabel()
+        clockLabel.translatesAutoresizingMaskIntoConstraints = false
+        clockLabel.textAlignment = .left
+        clockLabel.font = UIFont.systemFont(ofSize: 18)
+        clockLabel.adjustsFontSizeToFitWidth = true
+        clockLabel.minimumScaleFactor = 0.5
+        clockLabel.numberOfLines = 0
+        clockLabel.textColor = .black
+        clockLabel.text = "Available daily from \(availability[0][0]):\(availability[0][1]) \(availability[0][2]) to \(availability[1][0]):\(availability[1][1]) \(availability[1][2])"
+        
+        let stackView3 = UIStackView(arrangedSubviews: [clockIconView, clockLabel])
+        stackView3.axis = .horizontal
+        stackView3.distribution = .fillProportionally
+        stackView3.alignment = .fill
+        stackView3.spacing = 4
+        
+        slidingPanelView.addSubview(stackView3)
+        
+        stackView3.anchor(top: stackView2.bottomAnchor, left: slidingPanelView.leftAnchor, right: slidingPanelView.rightAnchor, paddingTop: 4, paddingLeft: 10, paddingRight: 10)
+        
+        let imageView = UIImageView()
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.image = UIImage(named: "charger_graphic")
+            imageView.contentMode = .scaleAspectFit
+            imageView.clipsToBounds = true
+            imageView.layer.cornerRadius = 15
+            imageView.layer.borderWidth = 4
+        imageView.layer.borderColor = UIColor(red: 0x2e/255.0, green: 0x47/255.0, blue: 0x5c/255.0, alpha: 1).cgColor
+            
+        slidingPanelView.addSubview(imageView)
+        
+            NSLayoutConstraint.activate([
+                imageView.centerXAnchor.constraint(equalTo: slidingPanelView.centerXAnchor),
+                imageView.topAnchor.constraint(equalTo: stackView3.bottomAnchor, constant: 20), // Adjust this as needed
+                imageView.widthAnchor.constraint(equalToConstant: 300), // Specify your desired width
+                imageView.heightAnchor.constraint(equalToConstant: 200) // Specify your desired height
+            ])
+        
+        let chargeButton = UIButton()
+        chargeButton.translatesAutoresizingMaskIntoConstraints = false
+        chargeButton.setTitle("Book Charge Now", for: .normal)
+        chargeButton.backgroundColor = UIColor(red: 0x2e/255.0, green: 0x47/255.0, blue: 0x5c/255.0, alpha: 1)
+        chargeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        chargeButton.setTitleColor(.orange, for: .normal)
+        chargeButton.layer.cornerRadius = 25 // Adjust this value as needed
+        chargeButton.clipsToBounds = true
+        chargeButton.addTarget(self, action: #selector(chargeButtonPressed), for: .touchUpInside)
+            // Add the button to the slidingPanelView
+            slidingPanelView.addSubview(chargeButton)
+
+            // Setup constraints for the button
+            NSLayoutConstraint.activate([
+                chargeButton.leadingAnchor.constraint(equalTo: slidingPanelView.leadingAnchor, constant: 20),
+                chargeButton.trailingAnchor.constraint(equalTo: slidingPanelView.trailingAnchor, constant: -20),
+                chargeButton.bottomAnchor.constraint(equalTo: slidingPanelView.bottomAnchor, constant: -20),
+                chargeButton.heightAnchor.constraint(equalToConstant: 50) // Set the height of the button
+            ])
+    }
+    
+    @objc func chargeButtonPressed() {
+        guard let uid = currentSelectedAnnotation?.uid else { return }
+        guard let pickupCoordinates = locationManager?.location?.coordinate else { return }
+//        guard let destinationCoordinates = view.destination?.coordinate else { return }
+        
+//        shouldPresentLoadingView(true, message: "Finding you a ride")
+        observeCurrentTrip(uid)
+        PassengerService.shared.uploadTrip(pickupCoordinates, uid) { (err, ref) in
+            if let error = err {
+                print("DEBUG: Failed to upload trip with error \(error.localizedDescription)")
+                return
+            }
+        }
+        handleDismissal()
     }
     
     
@@ -309,7 +514,7 @@ class HomeController: UIViewController {
         configureNavigationBar()
         configureMapView()
         configureRideActionView()
-        
+        configureBannerView()
         view.addSubview(actionButton)
         actionButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                             left: view.leftAnchor,
@@ -317,10 +522,39 @@ class HomeController: UIViewController {
                             paddingLeft: 20,
                             width: 30,
                             height: 30)
-
         configureTableView()
+        presentRules()
     }
     
+    func presentRules() {
+        if user?.accountType == .driver {
+            
+        }
+    }
+    
+    func configureBannerView() {
+        bannerView.backgroundColor = UIColor(red: 0x2e/255.0, green: 0x47/255.0, blue: 0x5c/255.0, alpha: 1)
+        view.addSubview(bannerView)
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        let logoImageView = UIImageView()
+        logoImageView.contentMode = .scaleAspectFit
+        logoImageView.image = UIImage(named: "logo")
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        bannerView.addSubview(logoImageView)
+        NSLayoutConstraint.activate([
+                bannerView.topAnchor.constraint(equalTo: view.topAnchor),
+                bannerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                bannerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                bannerView.heightAnchor.constraint(equalToConstant: 120) // Adjust the height as needed
+            ])
+        NSLayoutConstraint.activate([
+                logoImageView.centerXAnchor.constraint(equalTo: bannerView.centerXAnchor),
+                logoImageView.centerYAnchor.constraint(equalTo: bannerView.centerYAnchor, constant: 25),
+                logoImageView.widthAnchor.constraint(equalTo: bannerView.widthAnchor, multiplier: 0.4), // Width is 1/4 of the banner's width
+                logoImageView.heightAnchor.constraint(equalTo: logoImageView.widthAnchor) // Height equals the width to maintain aspect ratio (assumes the logo is square)
+            ])
+    }
+
     func configureLocationInputActivationView() {
         view.addSubview(inputActivationView)
         inputActivationView.centerX(inView: view)
@@ -345,6 +579,16 @@ class HomeController: UIViewController {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
         mapView.delegate = self
+    }
+    
+    func configureDriverMapView() {
+        let driverAnno = mapView.addAnnotationAndSelect(forCoordinate: (trip?.driverCoordinates)!)
+        let placemark = MKPlacemark(coordinate: (trip?.driverCoordinates)!)
+        let mapItem = MKMapItem(placemark: placemark)
+        generatePolyline(toDestination: mapItem)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = (user?.homeLocation)!
+        mapView.zoomToFit(annotations: [driverAnno, annotation])
     }
     
     func configureLocationInputView() {
@@ -440,17 +684,34 @@ private extension HomeController {
     }
     
     func generatePolyline(toDestination destination: MKMapItem) {
-        
         let request = MKDirections.Request()
-        request.source = MKMapItem.forCurrentLocation()
-        request.destination = destination
         request.transportType = .automobile
-        
+        if user?.accountType == .driver {
+//            var annotation: HomeAddressAnnotation
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            guard let locations = self.houselocations else { return }
+            guard let homelocation = locations[uid] else { return }
+            let annotation = self.getAnnotation(uid, homelocation)
+            let placemark = MKPlacemark(coordinate: annotation.coordinate)
+            let mapItem = MKMapItem(placemark: placemark)
+            request.source = mapItem
+            request.destination = destination
+//            let directionRequest = MKDirections(request: request)
+        }
+        if user?.accountType == .passenger {
+            request.source = MKMapItem.forCurrentLocation()
+            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: currentSelectedAnnotation!.coordinate))
+        }
         let directionRequest = MKDirections(request: request)
         directionRequest.calculate { (response, error) in
+            if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    return
+                }
             guard let response = response else { return }
             self.route = response.routes[0]
             guard let polyline = self.route?.polyline else { return }
+            print(polyline)
             self.mapView.addOverlay(polyline)
         }
     }
@@ -489,14 +750,43 @@ extension HomeController: MKMapViewDelegate {
         DriverService.shared.updateDriverLocation(location: location)
     }
     
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//        if let annotation = annotation as? DriverAnnotation {
+//            let view = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+//            view.image = #imageLiteral(resourceName: "chevron-sign-to-right")
+//            return view
+//        }
+//        return nil
+//    }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if let annotation = annotation as? DriverAnnotation {
+        if let annotation = annotation as? HomeAddressAnnotation {
             let view = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-            view.image = #imageLiteral(resourceName: "pin")
+//            view.image = #imageLiteral(resourceName: "pin")
+            let pinImage = UIImage(named: "pin")
+                    let size = CGSize(width: 30, height: 45)
+                    UIGraphicsBeginImageContext(size)
+                    pinImage?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                    let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+
+            view.image = resizedImage
             return view
         }
-        return nil
+//        print("Hello there")
+        if let annotation = annotation as? MKPointAnnotation {
+//            print("yes it is!")
+            var view: MKAnnotationView
+            view = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            view.canShowCallout = true
+
+            view.image = UIImage(named: "chevron-sign-to-right")
+            
+            return view
+        }
+
+        return nil  // Return nil for default annotations
     }
+    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let route = self.route {
             let polyline = route.polyline
@@ -509,7 +799,43 @@ extension HomeController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        guard let annotation = view.annotation else {return}
+        guard let annotation = view.annotation as? HomeAddressAnnotation else {return}
+        currentSelectedAnnotation = annotation
+        REF_USERS.child(annotation.uid).observeSingleEvent(of: .value, with: { snapshot in
+            let value = snapshot.value as? NSDictionary
+            let username = value?["fullname"] as? String ?? "meme"
+            let user_title = "Charge with " + username
+            self.usernameLabel.text = user_title
+            let address = value?["homeAddress"] as? String ?? "addy unaivalable"
+            self.addressLabel.text = address
+            self.chargerLabel.text = value?["charger"] as? String ?? "cargar"
+            guard let timings = value?["availability"] as? [[Int]] else {return}
+            if (timings[0][0] >= 12) {
+                self.availability[0][2] = "P.M."
+                if (timings[0][0] > 12) {
+                    self.availability[0][0] = "\(timings[0][0] - 12)"
+                }
+            } else {
+                self.availability[0][0] = "\(timings[0][0])"
+            }
+            if (timings[0][1] == 0) {
+                self.availability[0][1] = "00"
+            }
+            if (timings[1][0] < 12) {
+                self.availability[1][2] = "A.M."
+                self.availability[1][0] = "\(timings[1][0])"
+            } else {
+                if (timings[1][0] > 12) {
+                    self.availability[1][0] = "\(timings[1][0] - 12)"
+                }
+            }
+            if (timings[1][1] == 0) {
+                self.availability[1][1] = "00"
+            }
+                
+        }) { error in
+          print(error.localizedDescription)
+        }
         UIView.animate(withDuration: 0.3) {
             self.slidingPanelView.transform = CGAffineTransform(translationX: 0, y: -600)
         }
@@ -668,12 +994,14 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
 
 extension HomeController: RideActionViewDelegate {
     func uploadTrip(_ view: RideActionView) {
+//        NO IT IS NOT THIS UID
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let pickupCoordinates = locationManager?.location?.coordinate else { return }
         guard let destinationCoordinates = view.destination?.coordinate else { return }
         
         shouldPresentLoadingView(true, message: "Finding you a ride")
         
-        PassengerService.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { (err, ref) in
+        PassengerService.shared.uploadTrip(pickupCoordinates, uid) { (err, ref) in
             if let error = err {
                 print("DEBUG: Failed to upload trip with error \(error.localizedDescription)")
                 return
@@ -686,7 +1014,7 @@ extension HomeController: RideActionViewDelegate {
     }
     
     func cancelTrip() {
-        PassengerService.shared.deleteTrip { (error, ref) in
+        PassengerService.shared.deleteTrip(self.trip!.homeOwnerUid) { (error, ref) in
             if let error = error {
                 print("DEBUG: Error deleting trip..\(error.localizedDescription)")
                 return
@@ -718,26 +1046,27 @@ extension HomeController: RideActionViewDelegate {
     }
 }
 
-// MARK: - PickupControllerDelegate
+// MARK: - ConfirmationControllerDelegate
 
-extension HomeController: PickupControllerDelegate { 
-    func didAcceptTrip(_ trip: Trip) {
+extension HomeController: ConfirmationControllerDelegate { 
+    func didAcceptTrip(_ trip: Charge) {
         self.trip = trip
         
-        self.mapView.addAnnotationAndSelect(forCoordinate: trip.pickupCoordinates)
-        
-        setCustomRegion(withType: .pickup, coordinates: trip.pickupCoordinates)
-        
-        let placemark = MKPlacemark(coordinate: trip.pickupCoordinates)
-        let mapItem = MKMapItem(placemark: placemark)
-        generatePolyline(toDestination: mapItem)
-        
-        mapView.zoomToFit(annotations: mapView.annotations)
+//        self.mapView.addAnnotationAndSelect(forCoordinate: trip.driverCoordinates)
+//        
+//        setCustomRegion(withType: .pickup, coordinates: trip.driverCoordinates)
+//        
+//        let placemark = MKPlacemark(coordinate: trip.driverCoordinates)
+//        let mapItem = MKMapItem(placemark: placemark)
+//        generatePolyline(toDestination: mapItem)
+//        
+//        mapView.zoomToFit(annotations: mapView.annotations)
+        configureDriverMapView()
         
         observeCancelledTrip(trip: trip)
         
         self.dismiss(animated: true) {
-            Service.shared.fetchUserData(uid: trip.passengerUid) { (passenger) in
+            Service.shared.fetchUserData(uid: trip.driverUid) { (passenger) in
                 self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: passenger)
             }
         }

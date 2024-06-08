@@ -2,7 +2,7 @@
 //  ContainerController.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 27/10/2020.
+//  Created by Abel John on 27/10/2020.
 //
 
 import UIKit
@@ -17,10 +17,12 @@ class ContainerController: UIViewController {
     private var isExpaned = false
     private let blackView = UIView()
     private lazy var xOrigin = self.view.frame.width - 80
+    private var newUser = false
     
     private var user: User? {
         didSet {
             guard let user = user else { return }
+            homeController.newUser = newUser
             homeController.user = user
             configureMenuController(withUser: user)
         }
@@ -57,7 +59,8 @@ class ContainerController: UIViewController {
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true, completion: nil)
             }
-        } else {
+        }
+        else {
             configure()
         }
     }
@@ -84,8 +87,9 @@ class ContainerController: UIViewController {
     
     // MARK: -  Helpers
     
-    func configure() {
+    func configure(_ newUser: Bool = false) {
         view.backgroundColor = .backgroundColor
+        self.newUser = newUser
         configureHomeController()
         fetchUserData()
     }

@@ -2,7 +2,7 @@
 //  MenuHeader.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 27/10/2020.
+//  Created by Abel John on 27/10/2020.
 //
 
 import UIKit

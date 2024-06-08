@@ -2,7 +2,7 @@
 //  UserInfoHeader.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 28/10/2020.
+//  Created by Abel John on 28/10/2020.
 //
 
 import UIKit

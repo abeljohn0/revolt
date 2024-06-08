@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 18/10/2020.
+//  Created by Abel John on 18/10/2020.
 //
 
 import UIKit

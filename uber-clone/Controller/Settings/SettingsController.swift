@@ -2,7 +2,7 @@
 //  SettingsController.swift
 //  uber-clone
 //
-//  Created by Ted Hyeong on 28/10/2020.
+//  Created by Abel John on 28/10/2020.
 //
 
 import UIKit
@@ -76,14 +76,14 @@ class SettingsController: UITableViewController {
     
     // MARK: - Helpers
     
-    func locationText(forType type: LocationType) -> String {
-        switch type {
-        case .home:
-            return user.homeLocation ?? type.subtitle
-        case .work:
-            return user.workLocation ?? type.subtitle
-        }
-    }
+//    func locationText(forType type: LocationType) -> String {
+//        switch type {
+//        case .home:
+//            return user.homeLocation ?? type.subtitle
+//        case .work:
+//            return user.workLocation ?? type.subtitle
+//        }
+//    }
     
     func configureTableView() {
         tableView.rowHeight = 60
@@ -136,7 +136,7 @@ extension SettingsController {
         
         guard let type = LocationType(rawValue: indexPath.row) else { return cell }
         cell.titleLabel.text = type.description
-        cell.addressLabel.text = locationText(forType: type)
+//        cell.addressLabel.text = locationText(forType: type)
         
         return cell
     }
@@ -159,12 +159,12 @@ extension SettingsController: AddLocationControllerDelegate {
             self.dismiss(animated: true, completion: nil)
             self.userInfoUpdated = true
             
-            switch type {
-            case .home:
-                self.user.homeLocation = locationString
-            case .work:
-                self.user.workLocation = locationString
-            }
+//            switch type {
+//            case .home:
+//                self.user.homeLocation = locationString
+//            case .work:
+//                self.user.workLocation = locationString
+//            }
             
             self.tableView.reloadData()
         }
